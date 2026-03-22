@@ -1,4 +1,4 @@
-# 🚀 Automated API Testing Programs
+# 🚀 rest-assured-api-automation
 
 **Author:** Anuj Rajput  
 **Repository Name:** AutomatedAPITestingPrograms  
