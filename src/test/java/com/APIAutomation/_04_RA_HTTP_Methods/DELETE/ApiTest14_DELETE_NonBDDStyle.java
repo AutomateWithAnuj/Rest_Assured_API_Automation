@@ -61,8 +61,9 @@ public class ApiTest14_DELETE_NonBDDStyle {
         // Sending DELETE request to server
         response = request
                 .when()                                         // Switch to execution phase
-                .log().all()                                    // Console Output: Logs full request
                 .delete();                                      // Executes DELETE request
+                .log().all()                                    // Console Output: Logs full request
+
 
         // -------------------- PART 3: Verification --------------------
         // Validating server response
