@@ -7,6 +7,7 @@
     - Defines the overall test execution structure.
     - Specifies which test class should be executed.
     - No group filtering is applied in this configuration.
+
 -->
 
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
@@ -27,6 +28,9 @@
         preserve-order="true"
             → Ensures classes execute in the same order
               as defined in this XML file.
+
+        - The <suite> tag in TestNG represents the entire test execution, and its name is user-defined for reporting and identification purposes.
+
     -->
     <test name="AutomatedAPITestingPrograms"
           verbose="2"
