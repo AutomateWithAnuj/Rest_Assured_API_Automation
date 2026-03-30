@@ -22,6 +22,8 @@
         Attributes:
         verbose="2"         → Shows detailed execution logs in console.
         preserve-order="true" → Maintains execution order of classes as written below.
+
+        The <test> tag in TestNG is used to group multiple test classes and execute them as a logical test unit within a suite.
     -->
     <test name="AutomatedAPITestingPrograms"
           verbose="2"
