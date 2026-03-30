@@ -15,6 +15,9 @@
 <!-- 
     <suite> → Highest execution level in TestNG.
     Represents the complete test run.
+
+    - The <suite> tag in TestNG represents the entire test execution, and its name is user-defined for reporting and identification purposes.
+
 -->
 <suite name="Pincode Verification Project">
 
@@ -28,8 +31,6 @@
         preserve-order="true"
             → Ensures classes execute in the same order
               as defined in this XML file.
-
-        - The <suite> tag in TestNG represents the entire test execution, and its name is user-defined for reporting and identification purposes.
 
     -->
     <test name="AutomatedAPITestingPrograms"
