@@ -2,82 +2,146 @@ package com.APIAutomation._06_Test_Assertions;
 
 // ======================= IMPORTS =======================
 
-// TestNG Hard Assertion
+// Allure annotations → Used for reporting purpose
+import io.qameta.allure.Description;
+import io.qameta.allure.Owner;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+
+// Rest Assured → Used for API automation
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+
+// TestNG → Used for test execution
 import org.testng.Assert;
-
-// TestNG Annotations
 import org.testng.annotations.Test;
-
-// TestNG Soft Assertion
 import org.testng.asserts.SoftAssert;
 
 /**
  * This class demonstrates:
- * 1. Difference between Hard Assertion and Soft Assertion in TestNG
- * 2. How execution flow behaves when assertion fails
+ * 1. How to send POST request using Rest Assured
+ * 2. How to validate response using TestNG Hard & Soft assertions
+ * 3. How to integrate Allure reporting annotations
  */
-public class ApiTest28_TestNG_Assertions {
+public class ApiTest29_TestNG_Assertions_With_RA {
+
+    // RequestSpecification → Used to build HTTP request
+    private RequestSpecification request;
+
+    // Response → Stores actual response
+    private Response response;
 
     /**
      * HARD ASSERT EXAMPLE
-     * If assertion fails → execution stops immediately.
+     * If assertion fails → execution stops immediately
      */
-    @Test(enabled = false) // Disabled test (will not execute)
-    public void testHardAssertExample() {
+    @Owner("Anuj")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("TC#1 - Verify booking creation using Hard Assertions")
+    @Test(enabled = false)
+    public void testCreateBooking_HardAssert() {
 
-        System.out.println("Start of the Program");
-        // Console Output: Start of the Program
+        System.out.println("Start of Hard Assertion Test");
 
-        // Hard Assertion → Stops execution if condition fails
-        Assert.assertEquals("anuj", "Anuj");  
-        // This will FAIL because "anuj" ≠ "Anuj" (case-sensitive comparison)
+        // ======================= TEST DATA =======================
 
-        // This line will NOT execute if assertion fails above
-        System.out.println("End of the Program");
-        // Skipped due to assertion failure
+        String payload = "{\n" +
+                "    \"firstname\": \"James\",\n" +
+                "    \"lastname\": \"Brown\",\n" +
+                "    \"totalprice\": 111,\n" +
+                "    \"depositpaid\": true,\n" +
+                "    \"bookingdates\": {\n" +
+                "        \"checkin\": \"2018-01-01\",\n" +
+                "        \"checkout\": \"2025-10-10\"\n" +
+                "    },\n" +
+                "    \"additionalneeds\": \"Breakfast\"\n" +
+                "}";
+
+        // ======================= REQUEST =======================
+
+        request = RestAssured.given()
+                .baseUri("https://restful-booker.herokuapp.com")
+                .basePath("/booking")
+                .contentType(ContentType.JSON)
+                .body(payload);
+
+        // ======================= RESPONSE =======================
+
+        response = request.when().post();
+
+        // ======================= HARD ASSERTIONS =======================
+
+        Assert.assertEquals(response.getStatusCode(), 200);
+
+        Assert.assertEquals(response.jsonPath().getString("booking.firstname"), "James");
+
+        Assert.assertEquals(response.jsonPath().getString("booking.lastname"), "Brown");
+
+        Assert.assertEquals(response.jsonPath().getBoolean("booking.depositpaid"), true);
+
+        Assert.assertNotNull(response.jsonPath().get("bookingid"));
+
+        System.out.println("End of Hard Assertion Test");
     }
 
 
     /**
      * SOFT ASSERT EXAMPLE
-     * If assertion fails → execution continues.
-     * But we MUST call assertAll() at the end.
+     * If assertion fails → execution continues
      */
+    @Owner("Anuj")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("TC#2 - Verify booking creation using Soft Assertions")
     @Test
-    public void testSoftAssertExample() {
+    public void testCreateBooking_SoftAssert() {
 
-        System.out.println("Start of the Program");
-        // Console Output: Start of the Program
+        System.out.println("Start of Soft Assertion Test");
 
-        Boolean isNeeruMale = false;  
-        // Sample variable (not used in assertion, just for demonstration)
+        // ======================= TEST DATA =======================
 
-        // Create object of SoftAssert
+        String payload = "{\n" +
+                "    \"firstname\": \"James\",\n" +
+                "    \"lastname\": \"Brown\",\n" +
+                "    \"totalprice\": 111,\n" +
+                "    \"depositpaid\": true,\n" +
+                "    \"bookingdates\": {\n" +
+                "        \"checkin\": \"2018-01-01\",\n" +
+                "        \"checkout\": \"2025-10-10\"\n" +
+                "    },\n" +
+                "    \"additionalneeds\": \"Breakfast\"\n" +
+                "}";
+
+        // ======================= REQUEST =======================
+
+        request = RestAssured.given()
+                .baseUri("https://restful-booker.herokuapp.com")
+                .basePath("/booking")
+                .contentType(ContentType.JSON)
+                .body(payload);
+
+        // ======================= RESPONSE =======================
+
+        response = request.when().post();
+
+        // ======================= SOFT ASSERT =======================
+
         SoftAssert softAssert = new SoftAssert();
 
-        // Soft Assertion → Does NOT stop execution immediately
-        softAssert.assertEquals("anuj", "Anuj");
-        // This will FAIL but execution continues
+        softAssert.assertEquals(response.getStatusCode(), 200);
 
-        System.out.println("End of the Program");
-        // Console Output: End of the Program (This WILL execute)
+        softAssert.assertEquals(response.jsonPath().getString("booking.firstname"), "James");
 
-        // IMPORTANT: Collects all soft assertion results
-        softAssert.assertAll();  
-        /*
-           If any soft assertion failed above:
-           → Test will FAIL here.
-           
-           If all soft assertions passed:
-           → Test will PASS.
-           Soft assertions allow test execution to continue until assertAll() is called. Once assertAll() executes, 
-           if any assertion has failed, it throws AssertionError and stops further execution.
-        */
+        softAssert.assertEquals(response.jsonPath().getString("booking.lastname"), "Brown");
 
-        /*
-         Soft Assertions are useful when:
-         → You want test to continue execution
-         → You want to validate multiple things in one test
-         */
+        softAssert.assertEquals(response.jsonPath().getBoolean("booking.depositpaid"), true);
+
+        softAssert.assertNotNull(response.jsonPath().get("bookingid"));
+
+        System.out.println("End of Soft Assertion Test");
+
+        // Important
+        softAssert.assertAll();
     }
 }
