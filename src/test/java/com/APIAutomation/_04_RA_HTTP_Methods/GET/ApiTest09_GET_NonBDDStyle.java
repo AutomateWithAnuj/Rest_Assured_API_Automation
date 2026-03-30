@@ -35,11 +35,16 @@ public class ApiTest09_GET_NonBDDStyle {
 
         // ---------- GIVEN ----------
         request = RestAssured.given(); // Initialize request object
-        request.baseUri("https://api.zippopotam.us/"); // Set base URL
+        request.baseUri("https://api.zippopotam.us"); // Set base URL
         request.basePath("/IN/" + pincode); // Set endpoint with pincode
 
         // ---------- WHEN ----------
-        response = request.when().log().all().get(); 
+        response = request.log().all().when().get();
+        // .log().all() before .when() logs request details (recommended)
+        // request.when().log().all().get(); → Not recommended, unclear logging order
+        // request.when().get().log().all(); → Invalid for request logging, used for response logging after .then()
+        //when() prepares execution, but HTTP method like .get() or .post() is required to send the request and receive response.        
+        
         // Console Output: Full request details and response received
 
         System.out.println(response.statusCode());
