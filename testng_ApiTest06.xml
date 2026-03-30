@@ -38,7 +38,9 @@
                 Fully Qualified Class Name (FQCN)
                 This class will be executed completely.
                 All @Test methods inside this class will run
-                (unless restricted by groups or other configuration).
+                (unless restricted by groups or other configuration)
+            
+                In TestNG, the <class> tag requires the fully qualified class name so TestNG can locate and execute the test class.
             -->
             <class name="com.APIAutomation._03_TestNG_AllureReport.ApiTest06_RunMulTestCases"/>
 
