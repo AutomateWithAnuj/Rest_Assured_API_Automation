@@ -1,6 +1,7 @@
 package com.APIAutomation._02_RA_Concepts;
 
 import io.restassured.RestAssured;
+import org.testng.annotations.Test;
 
 /**
  * This class demonstrates a drawback of using BDD style directly
@@ -13,7 +14,8 @@ import io.restassured.RestAssured;
  */
 public class ApiTest05_RunDupMulTestCases {
 
-    public static void main(String[] args) {
+    @Test
+    public void testRunDuplicateMultipleTestCases() {
 
         // ---------------- POSITIVE TEST CASE ----------------
         String pincode = "110048"; // valid pincode
