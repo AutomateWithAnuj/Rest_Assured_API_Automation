@@ -1,5 +1,7 @@
 package com.APIAutomation._02_RA_Concepts;
 
+import org.testng.annotations.Test;
+
 /*
 This code demonstrates:
 Java Execution happens step by step
@@ -39,10 +41,11 @@ public class ApiTest03_NoPattern {
     }
 
     /**
-     * Main method
-     * Purpose: Entry point of the Java application
+     * Test method
+     * Purpose: Entry point of execution using TestNG
      */
-    public static void main(String[] args) {
+    @Test
+    public void testNoPatternExecution() {
 
         // Creating object of the class to call non-static methods
         ApiTest03_NoPattern test = new ApiTest03_NoPattern();
@@ -56,6 +59,7 @@ public class ApiTest03_NoPattern {
         Step 3 → Validation*/
     }
 }
+
 /*
 given() → returns RequestSpecification
 when()  → returns Response
