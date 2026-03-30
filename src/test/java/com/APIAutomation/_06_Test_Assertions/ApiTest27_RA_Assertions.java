@@ -12,46 +12,41 @@ import io.qameta.allure.SeverityLevel;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
-// Hamcrest Matchers → Used for assertions
-import org.hamcrest.Matchers;
-
 // TestNG → Used for test execution
+import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 /**
  * This class demonstrates:
  * 1. How to send POST request using Rest Assured
- * 2. How to validate response using Hamcrest matchers
+ * 2. How to validate response using TestNG Hard & Soft assertions
  * 3. How to integrate Allure reporting annotations
  */
-public class ApiTest27_RA_Assertions {
+public class ApiTest29_TestNG_Assertions_With_RA {
 
-    // RequestSpecification → Used to build the HTTP request
+    // RequestSpecification → Used to build HTTP request
     private RequestSpecification request;
 
-    // Response → Stores actual response received from server
+    // Response → Stores actual response
     private Response response;
 
-    // ValidatableResponse → Used for performing assertions
-    private ValidatableResponse validatableResponse;
-
     /**
-     * Test Case:
-     * Verify that booking is created successfully
-     * and important fields in response are correct.
+     * HARD ASSERT EXAMPLE
+     * If assertion fails → execution stops immediately
      */
-    @Owner("Anuj") // Shows test owner in Allure report
-    @Severity(SeverityLevel.CRITICAL) // Marks severity level in Allure report
-    @Description("TC#1 - Verify booking creation & bookingId is not null")
-    @Test
-    public void testCreateBooking_POST() {
+    @Owner("Anuj")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("TC#1 - Verify booking creation using Hard Assertions")
+    @Test(enabled = false)
+    public void testCreateBooking_HardAssert() {
 
-        // ======================= TEST DATA (Request Body) =======================
+        System.out.println("Start of Hard Assertion Test");
 
-        // JSON payload sent in POST request
+        // ======================= TEST DATA =======================
+
         String payload = "{\n" +
                 "    \"firstname\": \"James\",\n" +
                 "    \"lastname\": \"Brown\",\n" +
@@ -64,47 +59,89 @@ public class ApiTest27_RA_Assertions {
                 "    \"additionalneeds\": \"Breakfast\"\n" +
                 "}";
 
-        // ======================= BUILD REQUEST =======================
+        // ======================= REQUEST =======================
 
-        request = RestAssured.given()              // Start building request
-                .baseUri("https://restful-booker.herokuapp.com")  // Base URL
-                .basePath("/booking")              // Endpoint
-                .contentType(ContentType.JSON)     // Set request content type
-                .body(payload);                    // Attach JSON body
+        request = RestAssured.given()
+                .baseUri("https://restful-booker.herokuapp.com")
+                .basePath("/booking")
+                .contentType(ContentType.JSON)
+                .body(payload);
 
-        // ======================= SEND REQUEST =======================
+        // ======================= RESPONSE =======================
 
-        response = request.when().post();          // Send POST request
+        response = request.when().post();
 
-        // ======================= VALIDATE STATUS CODE =======================
+        // ======================= HARD ASSERTIONS =======================
 
-        validatableResponse = response.then()
-                .statusCode(200);                  // Validate HTTP status code is 200 OK
+        Assert.assertEquals(response.getStatusCode(), 200);
 
-        // ======================= VALIDATE RESPONSE BODY =======================
+        Assert.assertEquals(response.jsonPath().getString("booking.firstname"), "James");
 
-        validatableResponse
-                // Validate firstname = "James"
-                .body("booking.firstname", Matchers.equalTo("James"))
+        Assert.assertEquals(response.jsonPath().getString("booking.lastname"), "Brown");
 
-                // Validate lastname = "Brown"
-                .body("booking.lastname", Matchers.equalTo("Brown"))
+        Assert.assertEquals(response.jsonPath().getBoolean("booking.depositpaid"), true);
 
-                // Validate depositpaid = true
-                .body("booking.depositpaid", Matchers.equalTo(true))
+        Assert.assertNotNull(response.jsonPath().get("bookingid"));
 
-                // Validate bookingid is NOT null
-                .body("bookingid", Matchers.notNullValue());
+        System.out.println("End of Hard Assertion Test");
+    }
 
-        /*
-         If all assertions pass:
-         → Test will PASS
-         → Booking is successfully created
-         → bookingid is generated
-         
-         If any assertion fails:
-         → Test will FAIL
-         → Mismatch details will be shown in console and Allure report
-         */
+
+    /**
+     * SOFT ASSERT EXAMPLE
+     * If assertion fails → execution continues
+     */
+    @Owner("Anuj")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("TC#2 - Verify booking creation using Soft Assertions")
+    @Test
+    public void testCreateBooking_SoftAssert() {
+
+        System.out.println("Start of Soft Assertion Test");
+
+        // ======================= TEST DATA =======================
+
+        String payload = "{\n" +
+                "    \"firstname\": \"James\",\n" +
+                "    \"lastname\": \"Brown\",\n" +
+                "    \"totalprice\": 111,\n" +
+                "    \"depositpaid\": true,\n" +
+                "    \"bookingdates\": {\n" +
+                "        \"checkin\": \"2018-01-01\",\n" +
+                "        \"checkout\": \"2025-10-10\"\n" +
+                "    },\n" +
+                "    \"additionalneeds\": \"Breakfast\"\n" +
+                "}";
+
+        // ======================= REQUEST =======================
+
+        request = RestAssured.given()
+                .baseUri("https://restful-booker.herokuapp.com")
+                .basePath("/booking")
+                .contentType(ContentType.JSON)
+                .body(payload);
+
+        // ======================= RESPONSE =======================
+
+        response = request.when().post();
+
+        // ======================= SOFT ASSERT =======================
+
+        SoftAssert softAssert = new SoftAssert();
+
+        softAssert.assertEquals(response.getStatusCode(), 200);
+
+        softAssert.assertEquals(response.jsonPath().getString("booking.firstname"), "James");
+
+        softAssert.assertEquals(response.jsonPath().getString("booking.lastname"), "Brown");
+
+        softAssert.assertEquals(response.jsonPath().getBoolean("booking.depositpaid"), true);
+
+        softAssert.assertNotNull(response.jsonPath().get("bookingid"));
+
+        System.out.println("End of Soft Assertion Test");
+
+        // Important
+        softAssert.assertAll();
     }
 }
