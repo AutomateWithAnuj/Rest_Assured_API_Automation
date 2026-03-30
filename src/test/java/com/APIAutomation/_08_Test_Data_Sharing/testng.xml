@@ -1,0 +1,12 @@
+// ======================= TESTNG XML =======================
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="API Suite">
+
+    <test name="Booking Flow">
+        <classes>
+            <class name="com.APIAutomation.listeners.CreateBookingTest"/>
+            <class name="com.APIAutomation.listeners.UpdateBookingTest"/>
+        </classes>
+    </test>
+
+</suite>
