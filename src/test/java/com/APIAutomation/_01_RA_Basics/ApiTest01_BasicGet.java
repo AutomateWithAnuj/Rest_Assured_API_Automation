@@ -1,6 +1,7 @@
 package com.APIAutomation._01_RA_Basics;
 
 import io.restassured.RestAssured;
+import org.testng.annotations.Test;
 
 /**
  * This class demonstrates a very basic REST Assured GET API test.
@@ -9,10 +10,11 @@ import io.restassured.RestAssured;
 public class ApiTest01_BasicGet {
 
     /**
-     * Main method – execution starts from here.
-     * Used to run this API test as a simple Java program.
+     * Test method – execution starts from here.
+     * This method is executed using TestNG @Test annotation.
      */
-    public static void main(String[] args) {
+    @Test
+    public void testBasicGetRequest() {
 
         // RestAssured.given() → Used to build the request specification
         RestAssured
@@ -29,7 +31,7 @@ public class ApiTest01_BasicGet {
                 // Logs complete request and response details to the console
                 // Useful for debugging and understanding API behavior
                 .log().all()   // Console output: headers, body, status line, etc.
-                
+
                 // Validates that the response status code is 201
                 // Test will fail if the actual status code is not 201
                 .statusCode(201); // Console validation result
