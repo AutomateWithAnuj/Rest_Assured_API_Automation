@@ -92,9 +92,9 @@ public class ApiTest12_PUT_NonBDDStyle {
         // Step 2: Send PUT request
         // log().all() prints complete request details on the console
         response = request
-                .when()
-                .log().all()   // Console Output: URI, headers, body of request
-                .put();
+                    .log().all()   // Logs request details
+                    .when()
+                    .put();
 
         // Step 3: Validate response
         validatableResponse = response
