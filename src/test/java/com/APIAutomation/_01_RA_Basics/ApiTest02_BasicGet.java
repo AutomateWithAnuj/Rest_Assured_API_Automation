@@ -1,6 +1,7 @@
 package com.APIAutomation._01_RA_Basics;
 
 import io.restassured.RestAssured;
+import org.testng.annotations.Test;
 import java.util.Scanner;
 
 /**
@@ -10,10 +11,11 @@ import java.util.Scanner;
 public class ApiTest02_BasicGet {
 
     /**
-     * Main method – program execution starts here.
-     * Used to run this API test as a simple Java application.
+     * Test method – execution starts from here.
+     * This method is executed using TestNG @Test annotation.
      */
-    public static void main(String[] args) {
+    @Test
+    public void testGetPincodeDetails() {
 
         // Scanner is used to take user input from the console
         Scanner scanner = new Scanner(System.in);
