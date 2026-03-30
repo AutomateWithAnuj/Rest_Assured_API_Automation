@@ -59,6 +59,8 @@ public class ApiTest11_POST_NonBDDStyle {
         System.out.println("<---------Part 2 : HTTP Request----------->"); 
         // Console Output: Indicates API call execution
 
+        //.when() is used only before HTTP method, while request and response objects can be used independently.
+        
         response = request
                 .when()                                // Specifies when the request is sent
                 .post();                               // Executes POST request
